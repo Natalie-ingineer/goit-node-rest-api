@@ -31,7 +31,7 @@ export const getOneContact = async (req, res, next) => {
     }
     res.status(200).json(result);
   } catch (error) {
-    next(err);
+    next(error);
   }
 };
 
@@ -45,7 +45,7 @@ export const deleteContact = async (req, res, next) => {
 
     res.status(200).json(result);
   } catch (error) {
-    next(err);
+    next(error);
   }
 };
 
@@ -58,7 +58,7 @@ export const createContact = async (req, res, next) => {
     const result = await addContact(req.body);
     res.status(201).json(result);
   } catch (error) {
-    next(err);
+    next(error);
   }
 };
 
@@ -75,6 +75,6 @@ export const updateContact = async (req, res, next) => {
     }
     res.status(200).json(result);
   } catch (error) {
-    next(err);
+    next(error);
   }
 };
