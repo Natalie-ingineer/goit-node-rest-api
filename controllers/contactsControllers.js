@@ -11,7 +11,7 @@ import {
 //   updateContactSchema,
 // } from "../schemas/contactsSchemas.js";
 
-const HttpError = require("../helpers/HttpError.js");
+import HttpError from "../helpers/HttpError.js";
 
 export const getAllContacts = async (req, res, next) => {
   try {
