@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
-import { v4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 const contactsPath = path.join("db", "contacts.json");
 
@@ -46,7 +46,7 @@ export async function addContact(name, email, phone) {
     const contactOject = await listContacts();
 
     const newContact = {
-      id: v4(),
+      id: uuidv4(),
       name,
       email,
       phone,
@@ -71,7 +71,7 @@ export async function updateContactById(contactId, data) {
     if (contactById === -1) {
       return null;
     }
-    contactOject[contactById] = { id, ...data };
+    contactOject[contactById] = { id: contactId, ...data };
     await fs.writeFile(contactsPath, JSON.stringify(contactOject, null, 2));
     return contactOject[contactById];
   } catch (error) {
