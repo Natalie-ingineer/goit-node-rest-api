@@ -2,7 +2,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { v4 } from "uuid";
 
-const contactsPath = path.join(__dirname, "db", "contacts.json");
+const contactsPath = path.join("db", "contacts.json");
 
 export async function listContacts() {
   try {

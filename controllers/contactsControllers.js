@@ -6,10 +6,10 @@ import {
   updateContactById,
 } from "../services/contactsServices.js";
 
-import {
-  createContactSchema,
-  updateContactSchema,
-} from "../schemas/contactsSchemas.js";
+// import {
+//   createContactSchema,
+//   updateContactSchema,
+// } from "../schemas/contactsSchemas.js";
 
 const HttpError = require("../helpers/HttpError.js");
 
@@ -51,10 +51,10 @@ export const deleteContact = async (req, res, next) => {
 
 export const createContact = async (req, res, next) => {
   try {
-    const { error } = createContactSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
+    // const { error } = createContactSchema.validate(req.body);
+    // if (error) {
+    //   throw HttpError(400, error.message);
+    // }
     const result = await addContact(req.body);
     res.status(201).json(result);
   } catch (error) {
@@ -64,10 +64,10 @@ export const createContact = async (req, res, next) => {
 
 export const updateContact = async (req, res, next) => {
   try {
-    const { error } = updateContactSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
+    // const { error } = updateContactSchema.validate(req.body);
+    // if (error) {
+    //   throw HttpError(400, error.message);
+    // }
     const { id } = req.params;
     const result = await updateContactById(id, req.body);
     if (!result) {
