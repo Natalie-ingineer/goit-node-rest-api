@@ -12,7 +12,6 @@ import {
 } from "../schemas/contactsSchemas.js";
 
 const HttpError = require("../helpers/HttpError.js");
-// const contacts = require("../db/contacts.json");
 
 export const getAllContacts = async (req, res, next) => {
   try {
