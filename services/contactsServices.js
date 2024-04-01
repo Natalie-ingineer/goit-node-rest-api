@@ -69,7 +69,7 @@ export async function updateContactById(contactId, data) {
     if (contactById === -1) {
       return null;
     }
-    contactOject[contactById] = { id: contactId, ...data };
+    contactOject[contactById] = { id, ...data };
     await fs.writeFile(contactsPath, JSON.stringify(contactOject, null, 2));
     return contactOject[contactById];
   } catch (error) {
