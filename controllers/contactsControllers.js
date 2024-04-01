@@ -60,6 +60,9 @@ export const updateContact = async (req, res, next) => {
     if (!result) {
       throw HttpError(404, "Not found");
     }
+    if (Object.keys(req.body).length === 0) {
+      res.status(400).json({ message: "Body must have at least one field" });
+    }
     res.status(200).json(result);
   } catch (error) {
     next(error);
