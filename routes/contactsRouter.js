@@ -9,7 +9,10 @@ import {
 
 import validateBody from "../helpers/validateBody.js";
 
-import schemas from "../schemas/contactsSchemas.js";
+import {
+  createContactSchema,
+  updateContactSchema,
+} from "../schemas/contactsSchemas.js";
 
 const contactsRouter = express.Router();
 
@@ -19,16 +22,8 @@ contactsRouter.get("/:id", getOneContact);
 
 contactsRouter.delete("/:id", deleteContact);
 
-contactsRouter.post(
-  "/",
-  validateBody(schemas.createContactSchema),
-  createContact
-);
+contactsRouter.post("/", validateBody(createContactSchema), createContact);
 
-contactsRouter.put(
-  "/:id",
-  validateBody(schemas.updateContactSchema),
-  updateContact
-);
+contactsRouter.put("/:id", validateBody(updateContactSchema), updateContact);
 
 export default contactsRouter;
