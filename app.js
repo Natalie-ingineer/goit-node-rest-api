@@ -5,11 +5,9 @@ import cors from "cors";
 import mongoose from "mongoose";
 
 import contactsRouter from "./routes/contactsRouter.js";
+import { DB_HOST } from "./config.js";
 
 const app = express();
-
-const DB_HOST =
-  "mongodb+srv://musienkon27:vf0bCSLQsyjSdBgJ@cluster1.mxzt69u.mongodb.net/contacts_reader";
 
 mongoose.set("strictQuery", true);
 
