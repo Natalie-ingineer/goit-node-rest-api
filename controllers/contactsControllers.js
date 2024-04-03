@@ -8,7 +8,7 @@
 
 // import HttpError from "../helpers/HttpError.js";
 
-import { Contact } from "../db/contact";
+import { Contact } from "../db/contact.js";
 
 export const getAllContacts = async (req, res, next) => {
   try {
