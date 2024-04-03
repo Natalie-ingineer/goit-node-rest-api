@@ -5,9 +5,12 @@ import cors from "cors";
 import mongoose from "mongoose";
 
 import contactsRouter from "./routes/contactsRouter.js";
-import { DB_HOST } from "./config.js";
-
+import dotevn from "dotenv";
 const app = express();
+
+dotevn.config();
+
+const { DB_HOST } = process.env;
 
 mongoose.set("strictQuery", true);
 
