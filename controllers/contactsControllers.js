@@ -9,15 +9,12 @@
 // import HttpError from "../helpers/HttpError.js";
 
 import { Contact } from "../db/contact.js";
+import { catchAsync } from "../helpers/catchAsync.js";
 
-export const getAllContacts = async (req, res, next) => {
-  try {
-    const result = await Contact.find();
-    res.status(200).json(result);
-  } catch (error) {
-    next(err);
-  }
-};
+export const getAllContacts = catchAsync(async (req, res) => {
+  const result = await Contact.find();
+  res.status(200).json(result);
+});
 // export const getOneContact = async (req, res, next) => {
 //   try {
 //     const { id } = req.params;
