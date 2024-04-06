@@ -20,10 +20,12 @@ export const getOneContact = catchAsync(async (req, res) => {
 export const deleteContact = async (req, res) => {
   const { id } = req.params;
   const result = await Contact.findByIdAndDelete(id);
+
   if (!result) {
-    throw HttpError(404, "Not found");
+    return res.status(404).json({ error: "Contact not found" });
   }
-  res.status(200).json(result);
+
+  res.json(result);
 };
 
 export const createContact = catchAsync(async (req, res) => {
