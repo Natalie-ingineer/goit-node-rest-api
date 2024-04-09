@@ -1,8 +1,10 @@
 import express from "express";
 
-import { validateBody } from "../../helpers/validateBody.js";
+import validateBody from "../../helpers/validateBody.js";
 import { registerSchema } from "../../db/user.js";
 
-authRouter.post("/register", validateBody(registerSchema));
+import { register } from "../../controllers/auth.js";
 
 export const authRouter = express.Router();
+
+authRouter.post("/register", validateBody(registerSchema), register);
