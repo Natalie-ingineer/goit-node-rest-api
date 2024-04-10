@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotevn from "dotenv";
 
-import { User } from "../db/user.js";
+import { User } from "../models/user.js";
 import HttpError from "../helpers/HttpError.js";
 
 import { catchAsync } from "../helpers/catchAsync.js";

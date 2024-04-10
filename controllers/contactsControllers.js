@@ -1,6 +1,6 @@
 import HttpError from "../helpers/HttpError.js";
 
-import { Contact } from "../db/contact.js";
+import { Contact } from "../models/contact.js";
 import { catchAsync } from "../helpers/catchAsync.js";
 
 export const getAllContacts = catchAsync(async (req, res) => {

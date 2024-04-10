@@ -10,7 +10,7 @@ import {
 
 import validateBody from "../../helpers/validateBody.js";
 
-import { schemasJoi } from "../../db/contact.js";
+import { schemasJoi } from "../../models/contact.js";
 import { isValidid } from "../../middlewares/isValidid.js";
 import { authenticate } from "../../middlewares/authenticate.js";
 
