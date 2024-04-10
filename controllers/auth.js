@@ -24,8 +24,10 @@ export const register = catchAsync(async (req, res) => {
   const newUser = await User.create({ ...req.body, password: hashPassword });
 
   res.status(201).json({
-    email: newUser.email,
-    subscription: newUser.subscription,
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
   });
 });
 
@@ -45,11 +47,13 @@ export const login = catchAsync(async (req, res) => {
     id: user._id,
   };
 
-  const token = jwt.sing(payload, SECRET_KEY, { expiresIn: "23h " });
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
 
   res.status(200).json({
     token,
-    email,
-    subscription,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
   });
 });
