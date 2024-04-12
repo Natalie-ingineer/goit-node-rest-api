@@ -1,7 +1,10 @@
-import HttpError from "../helpers/HttpError.js";
 import jwt from "jsonwebtoken";
+import dotevn from "dotenv";
+
+import HttpError from "../helpers/HttpError.js";
 import { User } from "../models/user.js";
 
+dotevn.config();
 const { SECRET_KEY } = process.env;
 
 export const authenticate = async (req, res, next) => {
