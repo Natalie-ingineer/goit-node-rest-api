@@ -5,7 +5,7 @@ import { catchAsync } from "../helpers/catchAsync.js";
 
 export const getAllContacts = catchAsync(async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 2, limit = 20 } = req.query;
+  const { page = 1, limit = 20 } = req.query;
   const skip = (page - 1) * limit;
   const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
     skip,
@@ -15,8 +15,9 @@ export const getAllContacts = catchAsync(async (req, res) => {
 });
 
 export const getOneContact = catchAsync(async (req, res) => {
+  const { _id: owner } = req.user;
   const { id } = req.params;
-  const result = await Contact.findById(id);
+  const result = await Contact.findById({ _id: id, owner });
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -24,8 +25,9 @@ export const getOneContact = catchAsync(async (req, res) => {
 });
 
 export const deleteContact = async (req, res) => {
+  const { _id: owner } = req.user;
   const { id } = req.params;
-  const result = await Contact.findByIdAndDelete(id);
+  const result = await Contact.findByIdAndDelete({ _id: id, owner });
 
   if (!result) {
     return res.status(404).json({ error: "Contact not found" });
@@ -41,8 +43,11 @@ export const createContact = catchAsync(async (req, res) => {
 });
 
 export const updateContact = catchAsync(async (req, res) => {
+  const { _id: owner } = req.user;
   const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  const result = await Contact.findByIdAndUpdate({ _id: id, owner }, req.body, {
+    new: true,
+  });
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -53,8 +58,11 @@ export const updateContact = catchAsync(async (req, res) => {
 });
 
 export const updateStatusContact = catchAsync(async (req, res) => {
+  const { _id: owner } = req.user;
   const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  const result = await Contact.findByIdAndUpdate({ _id: id, owner }, req.body, {
+    new: true,
+  });
   if (!result) {
     throw HttpError(404, "Not found");
   }
