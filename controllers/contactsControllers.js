@@ -17,7 +17,7 @@ export const getAllContacts = catchAsync(async (req, res) => {
 export const getOneContact = catchAsync(async (req, res) => {
   const { _id: owner } = req.user;
   const { id } = req.params;
-  const result = await Contact.findById({ _id: id, owner });
+  const result = await Contact.findOne({ _id: id, owner });
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -27,7 +27,7 @@ export const getOneContact = catchAsync(async (req, res) => {
 export const deleteContact = async (req, res) => {
   const { _id: owner } = req.user;
   const { id } = req.params;
-  const result = await Contact.findByIdAndDelete({ _id: id, owner });
+  const result = await Contact.findOneAndDelete({ _id: id, owner });
 
   if (!result) {
     return res.status(404).json({ error: "Contact not found" });
@@ -45,7 +45,8 @@ export const createContact = catchAsync(async (req, res) => {
 export const updateContact = catchAsync(async (req, res) => {
   const { _id: owner } = req.user;
   const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate({ _id: id, owner }, req.body, {
+  const filter = { _id: id, owner };
+  const result = await Contact.findOneAndUpdate(filter, req.body, {
     new: true,
   });
   if (!result) {
@@ -60,7 +61,8 @@ export const updateContact = catchAsync(async (req, res) => {
 export const updateStatusContact = catchAsync(async (req, res) => {
   const { _id: owner } = req.user;
   const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate({ _id: id, owner }, req.body, {
+  const filter = { _id: id, owner };
+  const result = await Contact.findOneAndUpdate(filter, req.body, {
     new: true,
   });
   if (!result) {
