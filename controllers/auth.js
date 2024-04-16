@@ -1,6 +1,9 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotevn from "dotenv";
+import gravatar from "gravatar";
+import path from "path";
+import { promises as fs } from "fs";
 
 import { User } from "../models/user.js";
 import HttpError from "../helpers/HttpError.js";
@@ -11,6 +14,8 @@ dotevn.config();
 
 const { SECRET_KEY } = process.env;
 
+const avatarsDir = path.join("public", "ava");
+
 export const register = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -20,8 +25,13 @@ export const register = catchAsync(async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
+  const avatarURL = gravatar.url(email);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL,
+  });
 
   res.status(201).json({
     user: {
@@ -73,4 +83,17 @@ export const logout = catchAsync(async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: null });
   res.status(204).json();
+});
+
+export const updateAvatar = catchAsync(async (req, res) => {
+  const { _id } = req.user;
+  const { path: tempUpload, originalname } = req.file;
+  const resultUpload = path.join(avatarsDir, originalname);
+  await fs.rename(tempUpload, resultUpload);
+  const avatarURL = path.join("avatars", originalname);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  res.status(200).json({
+    avatarURL,
+  });
 });
