@@ -11,7 +11,7 @@ import {
   updateAvatar,
 } from "../../controllers/auth.js";
 import { authenticate } from "../../middlewares/authenticate.js";
-import { upload } from "../../middlewares/upload.js";
+import { upload } from "../../middlewares/upload.js ";
 
 export const router = express.Router();
 
@@ -23,4 +23,4 @@ router.get("/current", authenticate, getCurrent);
 
 router.post("/logout", authenticate, logout);
 
-router.patch("/avatars", authenticate, upload.single("avatar", updateAvatar));
+router.patch("/avatars", authenticate, upload.single("avatar"), updateAvatar);

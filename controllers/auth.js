@@ -4,6 +4,7 @@ import dotevn from "dotenv";
 import gravatar from "gravatar";
 import path from "path";
 import { promises as fs } from "fs";
+import { fileURLToPath } from "url";
 
 import { User } from "../models/user.js";
 import HttpError from "../helpers/HttpError.js";
@@ -14,7 +15,10 @@ dotevn.config();
 
 const { SECRET_KEY } = process.env;
 
-const avatarsDir = path.join("public", "ava");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const avatarsDir = path.join(__dirname, "/..", "public", "avatars");
+console.log(avatarsDir);
 
 export const register = catchAsync(async (req, res) => {
   const { email, password } = req.body;
@@ -88,9 +92,10 @@ export const logout = catchAsync(async (req, res) => {
 export const updateAvatar = catchAsync(async (req, res) => {
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
-  const resultUpload = path.join(avatarsDir, originalname);
+  const filename = `${_id}_${originalname}`;
+  const resultUpload = path.join(avatarsDir, filename);
   await fs.rename(tempUpload, resultUpload);
-  const avatarURL = path.join("avatars", originalname);
+  const avatarURL = path.join("avatars", filename);
   await User.findByIdAndUpdate(_id, { avatarURL });
 
   res.status(200).json({
