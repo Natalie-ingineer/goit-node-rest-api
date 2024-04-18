@@ -4,7 +4,6 @@ import dotevn from "dotenv";
 import gravatar from "gravatar";
 import path from "path";
 import { promises as fs } from "fs";
-import { fileURLToPath } from "url";
 
 import { User } from "../models/user.js";
 import HttpError from "../helpers/HttpError.js";
@@ -15,9 +14,7 @@ dotevn.config();
 
 const { SECRET_KEY } = process.env;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const avatarsDir = path.join(__dirname, "/..", "public", "avatars");
+const avatarsDir = path.join(process.cwd(), "public", "avatars");
 console.log(avatarsDir);
 
 export const register = catchAsync(async (req, res) => {
