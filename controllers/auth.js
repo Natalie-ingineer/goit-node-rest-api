@@ -1,7 +1,8 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotevn from "dotenv";
-import gravatar from "gravatar";
+
+import crypto from "crypto";
 import path from "path";
 import { promises as fs } from "fs";
 
@@ -26,7 +27,9 @@ export const register = catchAsync(async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const avatarURL = gravatar.url(email);
+
+  const emailHash = crypto.createHash("md5").update(email).digest("hex");
+  const avatarURL = `https://gravatar.com/avatar/${emailHash}.jpg?d=robohash`;
 
   const newUser = await User.create({
     ...req.body,
