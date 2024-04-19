@@ -1,10 +1,10 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotevn from "dotenv";
-
 import crypto from "crypto";
 import path from "path";
 import { promises as fs } from "fs";
+import Jimp from "jimp";
 
 import { User } from "../models/user.js";
 import HttpError from "../helpers/HttpError.js";
@@ -89,11 +89,18 @@ export const logout = catchAsync(async (req, res) => {
   res.status(204).json();
 });
 
+const avatarByJimp = async (avatarPath) => {
+  const avatar = await Jimp.read(avatarPath);
+  avatar.resize(250, 250).quality(90).writeAsync(avatarPath);
+};
+
 export const updateAvatar = catchAsync(async (req, res) => {
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarsDir, filename);
+  await avatarByJimp(tempUpload);
+
   await fs.rename(tempUpload, resultUpload);
   const avatarURL = path.join("avatars", filename);
   await User.findByIdAndUpdate(_id, { avatarURL });
