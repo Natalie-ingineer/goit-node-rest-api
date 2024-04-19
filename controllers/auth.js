@@ -16,7 +16,6 @@ dotevn.config();
 const { SECRET_KEY } = process.env;
 
 const avatarsDir = path.join(process.cwd(), "public", "avatars");
-console.log(avatarsDir);
 
 export const register = catchAsync(async (req, res) => {
   const { email, password } = req.body;
