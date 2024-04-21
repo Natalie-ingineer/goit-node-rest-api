@@ -95,6 +95,11 @@ const avatarByJimp = async (avatarPath) => {
 
 export const updateAvatar = catchAsync(async (req, res) => {
   const { _id } = req.user;
+
+  if (!req.file) {
+    throw HttpError(400, "No file uploaded for avatar");
+  }
+
   const { path: tempUpload, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarsDir, filename);
