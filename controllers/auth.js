@@ -1,6 +1,10 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotevn from "dotenv";
+import crypto from "crypto";
+import path from "path";
+import { promises as fs } from "fs";
+import Jimp from "jimp";
 
 import { User } from "../models/user.js";
 import HttpError from "../helpers/HttpError.js";
@@ -10,6 +14,8 @@ import { catchAsync } from "../helpers/catchAsync.js";
 dotevn.config();
 
 const { SECRET_KEY } = process.env;
+
+const avatarsDir = path.join(process.cwd(), "public", "avatars");
 
 export const register = catchAsync(async (req, res) => {
   const { email, password } = req.body;
@@ -21,7 +27,14 @@ export const register = catchAsync(async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const emailHash = crypto.createHash("md5").update(email).digest("hex");
+  const avatarURL = `https://gravatar.com/avatar/${emailHash}.jpg?d=robohash`;
+
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL,
+  });
 
   res.status(201).json({
     user: {
@@ -73,4 +86,30 @@ export const logout = catchAsync(async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: null });
   res.status(204).json();
+});
+
+const avatarByJimp = async (avatarPath) => {
+  const avatar = await Jimp.read(avatarPath);
+  avatar.resize(250, 250).quality(90).writeAsync(avatarPath);
+};
+
+export const updateAvatar = catchAsync(async (req, res) => {
+  const { _id } = req.user;
+
+  if (!req.file) {
+    throw HttpError(400, "No file uploaded for avatar");
+  }
+
+  const { path: tempUpload, originalname } = req.file;
+  const filename = `${_id}_${originalname}`;
+  const resultUpload = path.join(avatarsDir, filename);
+  await avatarByJimp(tempUpload);
+
+  await fs.rename(tempUpload, resultUpload);
+  const avatarURL = path.join("avatars", filename);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  res.status(200).json({
+    avatarURL,
+  });
 });
