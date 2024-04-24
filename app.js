@@ -3,7 +3,6 @@ import morgan from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotevn from "dotenv";
-import nodemailer from "nodemailer";
 
 import contactsRouter from "./routes/api/contactsRouter.js";
 
@@ -13,30 +12,7 @@ const app = express();
 
 dotevn.config();
 
-const { DB_HOST, PASSWORD } = process.env;
-
-const config = {
-  host: "smtp.meta.ua",
-  port: 465,
-  secure: true,
-  auth: {
-    user: "musienkon@meta.ua",
-    pass: PASSWORD,
-  },
-};
-
-const transporter = nodemailer.createTransport(config);
-const emailOptions = {
-  from: "musienkon@meta.ua",
-  to: "noresponse@gmail.com",
-  subject: "Nodemailer test",
-  text: "Привіт. Ми тестуємо надсилання листів!",
-};
-
-transporter
-  .sendMail(emailOptions)
-  .then((info) => console.log(info))
-  .catch((err) => console.log(err));
+const { DB_HOST } = process.env;
 
 mongoose.set("strictQuery", true);
 

@@ -9,6 +9,7 @@ import {
   getCurrent,
   logout,
   updateAvatar,
+  verifyEmail,
 } from "../../controllers/auth.js";
 import { authenticate } from "../../middlewares/authenticate.js";
 import { upload } from "../../middlewares/upload.js ";
@@ -24,3 +25,5 @@ router.get("/current", authenticate, getCurrent);
 router.post("/logout", authenticate, logout);
 
 router.patch("/avatars", authenticate, upload.single("avatar"), updateAvatar);
+
+router.get("/verify/:verificationToken", verifyEmail);
